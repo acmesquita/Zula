@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="br.edu.ifpi.ads.tep.zula.MainActivity"
+    tools:showIn="@layout/app_bar_main"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/nova_viagem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nova Viagem"
+        android:clickable="true"
+        android:onClick="onOpcaoNovaViagem"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:autoText="false" />
+    <TextView
+        android:id="@+id/novo_gasto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Novo Gasto"
+        android:clickable="true"
+        android:onClick="onOpcaoNovoGasto"
+        android:layout_weight="1" />
+    <TextView
+        android:id="@+id/listar_viagens"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Minhas Viagens"
+        android:clickable="true"
+        android:onClick="onOpcaoListarViagem"
+        android:layout_weight="1" />
+
+
+</LinearLayout>
