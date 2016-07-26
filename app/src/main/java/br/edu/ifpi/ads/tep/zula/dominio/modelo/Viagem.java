@@ -1,5 +1,6 @@
 package br.edu.ifpi.ads.tep.zula.dominio.modelo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.List;
 /**
  * Created by djas on 20/07/16.
  */
-public class Viagem {
+public class Viagem implements Serializable {
 
     private TipoViagemEnum tipoViagem;
     private String destino;

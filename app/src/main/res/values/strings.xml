@@ -9,4 +9,5 @@
     <string name="lbl_tipo_viagem">Tipo de Viagem</string>
     <string name="lbl_data_viagem">Data da Viagem</string>
     <string name="lbl_salva_viagem">Salvar</string>
+    <string name="ok">Ok</string>
 </resources>

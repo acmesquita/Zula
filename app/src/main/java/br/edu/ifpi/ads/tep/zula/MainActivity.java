@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,6 +18,8 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private final int NOVA_VIAGEM = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,8 +103,30 @@ public class MainActivity extends AppCompatActivity
         /*Intent para tela de cadastro*/
         Toast.makeText(this, "Clicou em Nova Viagem", Toast.LENGTH_SHORT).show();
         Intent novaViagem = new Intent(this, NovaViagemActivity.class);
-        startActivity(novaViagem);
+        startActivityForResult(novaViagem, NOVA_VIAGEM);
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Bundle bundle = null;
+
+        if(data != null){
+            bundle = data.getExtras();
+        }
+
+        if (requestCode == NOVA_VIAGEM){
+            switch (resultCode) {
+                case RESULT_OK:
+
+                    break;
+                case RESULT_CANCELED:
+                    AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+                    dlg.setMessage("Operação Cancelada.");
+                    dlg.setNeutralButton(getResources().getString(R.string.ok), null);
+                    dlg.show();
+                    break;
+            }
+        }
     }
 
     public void onOpcaoListarViagem(View view) {
