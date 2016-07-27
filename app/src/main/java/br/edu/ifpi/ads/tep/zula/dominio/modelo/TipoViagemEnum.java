@@ -28,4 +28,13 @@ public enum TipoViagemEnum {
     public String getDescricao() {
         return descricao;
     }
+
+    public static TipoViagemEnum getByDescricao(String descricao){
+        for (TipoViagemEnum tipo : values()){
+            if(tipo.getDescricao().equals(descricao)){
+                return tipo;
+            }
+        }
+        return null;
+    }
 }

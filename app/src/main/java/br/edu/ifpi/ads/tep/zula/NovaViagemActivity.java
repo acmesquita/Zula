@@ -52,7 +52,7 @@ public class NovaViagemActivity extends AppCompatActivity implements View.OnClic
         try {
             viagem.setData(UtilsData.parseForDate(edtData.getText().toString()));
             viagem.setDestino(edtDestino.getText().toString());
-            viagem.setTipoViagem(TipoViagemEnum.valueOf((String) spnTipoViagem.getSelectedItem()));
+            viagem.setTipoViagem(TipoViagemEnum.getByDescricao((String) spnTipoViagem.getSelectedItem()));
         } catch (ParseException e) {
             Toast.makeText(this, "Erro na conversão de data", Toast.LENGTH_SHORT);
             e.printStackTrace();

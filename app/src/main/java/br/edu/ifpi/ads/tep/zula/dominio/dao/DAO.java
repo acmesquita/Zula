@@ -13,7 +13,6 @@ public class DAO {
     private static List<Viagem> viagens = new ArrayList<>();
 
     public static List<Viagem> getViagens(){
-
         return viagens;
     }
 

@@ -16,10 +16,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import br.edu.ifpi.ads.tep.zula.dominio.dao.DAO;
+import br.edu.ifpi.ads.tep.zula.dominio.modelo.Viagem;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private final int NOVA_VIAGEM = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +47,8 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
     }
 
     @Override
@@ -113,25 +123,26 @@ public class MainActivity extends AppCompatActivity
         if(data != null){
             bundle = data.getExtras();
         }
-
+        /*Resposta De Nova Viagem*/
         if (requestCode == NOVA_VIAGEM){
             switch (resultCode) {
                 case RESULT_OK:
-
+                    Viagem viagem = (Viagem) bundle.getSerializable("VIAGEM");
+                    DAO.addViagem(viagem);
                     break;
                 case RESULT_CANCELED:
-                    AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-                    dlg.setMessage("Operação Cancelada.");
-                    dlg.setNeutralButton(getResources().getString(R.string.ok), null);
-                    dlg.show();
+                    Toast.makeText(this, "A viagem não foi salva.", Toast.LENGTH_SHORT).show();
                     break;
             }
         }
+
     }
 
     public void onOpcaoListarViagem(View view) {
         /*Intent para tela de Listagem das Viagens*/
         Toast.makeText(this, "Clicou em Listar Viagem", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, MinhasViagensActivity.class);
+        startActivity(intent);
     }
 
     public void onOpcaoNovoGasto(View view) {

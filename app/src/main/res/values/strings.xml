@@ -10,4 +10,6 @@
     <string name="lbl_data_viagem">Data da Viagem</string>
     <string name="lbl_salva_viagem">Salvar</string>
     <string name="ok">Ok</string>
+    <string name="action_search">Buscar</string>
+    <string name="action_share">Compartilhar</string>
 </resources>

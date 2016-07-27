@@ -16,4 +16,9 @@ public class UtilsData {
         return data;
     }
 
+    public static String getData(Date data){
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(data);
+    }
+
 }
