@@ -12,4 +12,9 @@
     <string name="ok">Ok</string>
     <string name="action_search">Buscar</string>
     <string name="action_share">Compartilhar</string>
+    <string name="lbl_viagem">Viagem</string>
+    <string name="lbl_tipo_Gasto">Tipo do Gasto</string>
+    <string name="lbl_valor">Valor</string>
+    <string name="lbl_data">Data D</string>
+    <string name="lixeira">Excluir</string>
 </resources>

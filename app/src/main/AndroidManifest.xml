@@ -20,8 +20,19 @@
         </activity>
         <activity android:name=".NovaViagemActivity" />
         <activity android:name=".MinhasViagensActivity">
-            <meta-data android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity android:name=".NovoGastoActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MinhasViagensActivity" />
+        </activity>
+        <activity android:name=".GastosViagemActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MinhasViagensActivity" />
         </activity>
     </application>
 

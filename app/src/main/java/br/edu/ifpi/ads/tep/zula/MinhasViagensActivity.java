@@ -66,7 +66,6 @@ public class MinhasViagensActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id ==  R.id.action_search){
-
             return true;
         }
         else if (id == R.id.action_settings) {

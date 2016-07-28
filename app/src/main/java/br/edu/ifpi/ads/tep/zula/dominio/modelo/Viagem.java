@@ -10,13 +10,14 @@ import java.util.List;
  */
 public class Viagem implements Serializable {
 
+    private int id;
     private TipoViagemEnum tipoViagem;
     private String destino;
     private Date data;
     private List<Gasto> gastos;
 
     public Viagem(){
-        this.gastos = new ArrayList<>();
+        this.gastos = new ArrayList<Gasto>();
     }
 
     public Viagem(TipoViagemEnum tipoViagem, String destino, Date data, List<Gasto> gastos) {
@@ -56,6 +57,14 @@ public class Viagem implements Serializable {
 
     public void setGastos(List<Gasto> gastos) {
         this.gastos = gastos;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override

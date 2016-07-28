@@ -1,12 +1,13 @@
 package br.edu.ifpi.ads.tep.zula.dominio.modelo;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
 /**
  * Created by catharina on 20/07/16.
  */
-public class Gasto {
+public class Gasto implements Serializable{
 
     private String nome;
     private Viagem viagem;
@@ -60,8 +61,6 @@ public class Gasto {
         if (o == null || getClass() != o.getClass()) return false;
 
         Gasto gasto = (Gasto) o;
-
-        if (!getNome().equals(gasto.getNome())) return false;
         if (!getViagem().equals(gasto.getViagem())) return false;
         if (getTipoDeGasto() != gasto.getTipoDeGasto()) return false;
         if (!getData().equals(gasto.getData())) return false;
@@ -71,7 +70,7 @@ public class Gasto {
 
     @Override
     public int hashCode() {
-        int result = getNome().hashCode();
+        int result = 0;
         result = 31 * result + getViagem().hashCode();
         result = 31 * result + getTipoDeGasto().hashCode();
         result = 31 * result + getData().hashCode();

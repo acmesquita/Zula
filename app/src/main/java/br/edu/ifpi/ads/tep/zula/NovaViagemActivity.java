@@ -50,8 +50,18 @@ public class NovaViagemActivity extends AppCompatActivity implements View.OnClic
         edtDestino = (EditText) findViewById(R.id.edtDestino);
 
         try {
-            viagem.setData(UtilsData.parseForDate(edtData.getText().toString()));
-            viagem.setDestino(edtDestino.getText().toString());
+            if (edtDestino.getText().toString().trim() != "") {
+                viagem.setDestino(edtDestino.getText().toString());
+            }
+            else{
+                Toast.makeText(this, "Campo Destino é obrigatório.", Toast.LENGTH_SHORT).show();
+            }
+            if (edtData.getText().toString().trim() != ""){
+                viagem.setData(UtilsData.parseForDate(edtData.getText().toString()));
+            }
+            else{
+                Toast.makeText(this, "Campo Data é obrigatório.", Toast.LENGTH_SHORT).show();
+            }
             viagem.setTipoViagem(TipoViagemEnum.getByDescricao((String) spnTipoViagem.getSelectedItem()));
         } catch (ParseException e) {
             Toast.makeText(this, "Erro na conversão de data", Toast.LENGTH_SHORT);

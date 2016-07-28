@@ -14,41 +14,82 @@
     android:orientation="vertical"
     android:gravity="center">
 
-    <TextView
-        android:id="@+id/nova_viagem"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Nova Viagem"
-        android:clickable="true"
-        android:onClick="onOpcaoNovaViagem"
-        android:drawableLeft="@drawable/nova_viagem"
-        android:gravity="center"
         android:layout_gravity="center"
-        android:textSize="20dp"
-        android:textIsSelectable="false" />
-    <TextView
-        android:id="@+id/novo_gasto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Novo Gasto"
-        android:drawableLeft="@drawable/novo_gasto"
-        android:layout_gravity="center"
-        android:gravity="center"
         android:clickable="true"
-        android:onClick="onOpcaoNovoGasto"
+        android:onClick="onOpcaoNovaViagem">
 
-        android:textSize="20dp" />
-    <TextView
-        android:id="@+id/listar_viagens"
+        <ImageView
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:id="@+id/imageView2"
+            android:src="@drawable/icon_mala_viagem"
+            android:layout_marginLeft="10dp" />
+
+        <TextView
+            android:id="@+id/nova_viagem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nova Viagem"
+            android:clickable="true"
+            android:gravity="center"
+            android:textSize="20dp"
+            android:textIsSelectable="false"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Minhas Viagens"
-        android:layout_gravity="center"
-        android:gravity="center"
         android:clickable="true"
-        android:drawableLeft="@drawable/minhas_viagens"
-        android:onClick="onOpcaoListarViagem"
-        android:textSize="20dp" />
+        android:onClick="onOpcaoNovoGasto">
+
+        <ImageView
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:id="@+id/imageView3"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/gasto" />
+
+        <TextView
+            android:id="@+id/novo_gasto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Novo Gasto"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:clickable="true"
+            android:textSize="20dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:onClick="onOpcaoListarViagem">
+
+        <ImageView
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:id="@+id/imageView4"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/minhas_viagens_legal" />
+
+        <TextView
+            android:id="@+id/listar_viagens"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Minhas Viagens"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:clickable="true"
+            android:textSize="20dp" />
+    </LinearLayout>
 
 
 </LinearLayout>

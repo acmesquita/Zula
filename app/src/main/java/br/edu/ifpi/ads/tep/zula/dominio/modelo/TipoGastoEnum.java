@@ -1,5 +1,8 @@
 package br.edu.ifpi.ads.tep.zula.dominio.modelo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by djas on 20/07/16.
  */
@@ -18,4 +21,22 @@ public enum TipoGastoEnum {
     public String getDescricao(){
         return descricao;
     }
+
+    public static List<String> getTipos() {
+        List<String> tipos = new ArrayList<>();
+        for(TipoGastoEnum tipo : TipoGastoEnum.values()){
+            tipos.add(tipo.getDescricao());
+        }
+        return tipos;
+    }
+
+    public static TipoGastoEnum getTipoByDesc(String descricao) {
+        for(TipoGastoEnum tipo : TipoGastoEnum.values()){
+            if(tipo.getDescricao().equals(descricao)){
+                return  tipo;
+            }
+        }
+        return null;
+    }
+
 }
