@@ -64,10 +64,12 @@ public class GastoAdapter extends RecyclerView.Adapter<GastoAdapter.GastoViewHol
         return  gastos.size();
     }
 
-    public void remove(Gasto gasto){
-        int position = gastos.indexOf(gasto);
-        gastos.remove(position);
-        notifyItemRemoved(position);
+    public void remove(List<Gasto> gastosSelecionados){
+        for(Gasto gasto :gastosSelecionados){
+            int position = gastos.indexOf(gasto);
+            gastos.remove(position);
+            notifyItemRemoved(position);
+        }
     }
 
     public class GastoViewHolder extends RecyclerView.ViewHolder{

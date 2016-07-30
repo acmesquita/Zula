@@ -71,14 +71,24 @@ public class GastosViagemActivity extends AppCompatActivity {
         if(id ==  R.id.lixeira){
             AlertDialog.Builder dig = new AlertDialog.Builder(this);
             dig.setTitle("Excluir");
-            dig.setMessage("Deseja realmente excluir essa viagem?");
+            dig.setMessage("Deseja realmente excluir essa gasto?");
             dig.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     excluirGasto();
                 }
             });
-            dig.setNegativeButton("Cancela", null);
+            dig.setNegativeButton("Cancela", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    for (int i = 0; i < recyclerView.getChildCount(); i++) {
+                        CheckBox checkBox = (CheckBox) recyclerView.getChildAt(i).findViewById(R.id.checkBox);
+                        if (checkBox.isChecked()) {
+                            checkBox.setChecked(false);
+                        }
+                    }
+                }
+            });
             dig.show();
 
 
@@ -94,15 +104,17 @@ public class GastosViagemActivity extends AppCompatActivity {
     }
 
     public void excluirGasto(){
+        List<Gasto> gastoSelecionados = new ArrayList<>();
         if(recyclerView.getAdapter() != null) {
             for (int i = 0; i < recyclerView.getChildCount(); i++) {
                 CheckBox checkBox = (CheckBox) recyclerView.getChildAt(i).findViewById(R.id.checkBox);
                 if (checkBox.isChecked()) {
                     Gasto gasto = gastos.get(i);
-                    adapter.remove(gasto);
+                    gastoSelecionados.add(gasto);
                 }
             }
             ;
+            adapter.remove(gastoSelecionados);
         }
         else{
             Toast.makeText(this, "Selecione pelo menos um item.", Toast.LENGTH_SHORT).show();

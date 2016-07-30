@@ -17,11 +17,15 @@ import android.widget.CheckBox;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.ifpi.ads.tep.zula.adapters.ViagemAdapter;
 import br.edu.ifpi.ads.tep.zula.dominio.dao.DAO;
+import br.edu.ifpi.ads.tep.zula.dominio.modelo.Gasto;
 import br.edu.ifpi.ads.tep.zula.dominio.modelo.Viagem;
+import br.edu.ifpi.ads.tep.zula.util.UtilsData;
 
 public class MinhasViagensActivity extends AppCompatActivity {
 
@@ -47,7 +51,7 @@ public class MinhasViagensActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
-        FloatingActionButton floatingActionButton  = (FloatingActionButton) findViewById(R.id.botao_adicionar_viagem);
+
     }
 
     @Override
@@ -78,7 +82,23 @@ public class MinhasViagensActivity extends AppCompatActivity {
         if(id ==  R.id.action_search){
             return true;
         }
-        else if (id == R.id.action_settings) {
+        else if (id == R.id.action_share) {
+            /*Criar lista e criar o compartilhar varias viagens*/
+            List<Viagem> viagensSelecionadas = new ArrayList<>();
+            if(recyclerView.getAdapter() != null) {
+                for (int i = 0; i < recyclerView.getChildCount(); i++) {
+                    CheckBox checkBox = (CheckBox) recyclerView.getChildAt(i).findViewById(R.id.checkViagem);
+                    if (checkBox.isChecked()) {
+                        Viagem viagem = viagens.get(i);
+                        viagensSelecionadas.add(viagem);
+                    }
+                }
+                ;
+                compartilharViagem(viagensSelecionadas);
+            }
+            else{
+                Toast.makeText(this, "Selecione pelo menos um item.", Toast.LENGTH_SHORT).show();
+            }
 
             return true;
         }
@@ -110,16 +130,43 @@ public class MinhasViagensActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void compartilharViagem(List<Viagem> viagensSelecionadas) {
+        String msg = "";
+        for(Viagem v : viagensSelecionadas){
+            msg += montarMensagem(v) + "\n\n";
+        }
+
+        Intent minhaIntent = new Intent();
+        minhaIntent.setAction(Intent.ACTION_SEND);
+        minhaIntent.putExtra(Intent.EXTRA_SUBJECT, "Suas Viagens pelo Zula app");
+        minhaIntent.putExtra(Intent.EXTRA_TEXT, msg);
+        minhaIntent.setType("text/plain");
+        startActivity(minhaIntent);
+
+    }
+
+    private String montarMensagem(Viagem viagem) {
+        String msg = "Viagem: "+viagem.getDestino()+"\n"+
+                "Periodo: "+UtilsData.getData(viagem.getData())+"\n";
+        for (Gasto gasto: viagem.getGastos()){
+            msg += gasto.getTipoDeGasto().getDescricao() + " - R$ "+gasto.getValor()+"\n";
+        }
+        msg+="Compartilhado por: Zula app";
+        return msg;
+    }
+
     private void excluirViagem() {
+        List<Viagem> viagemsSelecionadas = new ArrayList<>();
         if(recyclerView.getAdapter() != null) {
             for (int i = 0; i < recyclerView.getChildCount(); i++) {
                 CheckBox checkBox = (CheckBox) recyclerView.getChildAt(i).findViewById(R.id.checkViagem);
                 if (checkBox.isChecked()) {
                     Viagem viagem = viagens.get(i);
-                    adapter.remove(viagem);
+                    viagemsSelecionadas.add(viagem);
                 }
             }
             ;
+            adapter.remove(viagemsSelecionadas);
         }
         else{
             Toast.makeText(this, "Selecione pelo menos um item.", Toast.LENGTH_SHORT).show();
@@ -130,6 +177,21 @@ public class MinhasViagensActivity extends AppCompatActivity {
 
     public void adicionarViagem(View view) {
         Intent intent = new Intent(this, NovaViagemActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent,0);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 0){
+            Bundle extras = data.getExtras();
+            if(extras != null){
+                Viagem viagem = (Viagem) extras.getSerializable("VIAGEM");
+                List<Viagem> viagens = DAO.getViagens();
+                viagem.setId(viagens.size());
+                viagens.add(viagem);
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
