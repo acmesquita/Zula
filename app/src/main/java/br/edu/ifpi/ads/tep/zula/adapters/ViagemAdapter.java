@@ -64,6 +64,11 @@ public class ViagemAdapter extends RecyclerView.Adapter<ViagemAdapter.ViagemView
         holder.txtData.setText(UtilsData.getData(viagem.getData()));
     }
 
+    public void remove(Viagem viagem){
+        int position = viagens.indexOf(viagem);
+        viagens.remove(viagem);
+        notifyItemRemoved(position);
+    }
     @Override
     public int getItemCount() {
         return viagens.size();

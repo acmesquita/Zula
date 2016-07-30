@@ -9,7 +9,7 @@ import java.util.List;
 public enum TipoViagemEnum {
 
     LAZER("Lazer"),
-    NEGOCIO("Negocio");
+    NEGOCIO("Negócios");
 
     private String descricao;
 

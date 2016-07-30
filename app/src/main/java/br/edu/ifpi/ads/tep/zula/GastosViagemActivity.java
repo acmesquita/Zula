@@ -1,7 +1,9 @@
 package br.edu.ifpi.ads.tep.zula;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -67,29 +69,44 @@ public class GastosViagemActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id ==  R.id.lixeira){
-            if(recyclerView.getAdapter() != null) {
-                for (int i = 0; i < recyclerView.getChildCount(); i++) {
-                    CheckBox checkBox = (CheckBox) recyclerView.getChildAt(i).findViewById(R.id.checkBox);
-                    if (checkBox.isChecked()) {
-                        Gasto gasto = gastos.get(i);
-                        adapter.remove(gasto);
-                    }
+            AlertDialog.Builder dig = new AlertDialog.Builder(this);
+            dig.setTitle("Excluir");
+            dig.setMessage("Deseja realmente excluir essa viagem?");
+            dig.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    excluirGasto();
                 }
-               ;
-            }
-            else{
-                Toast.makeText(this, "Selecione pelo menos um item.", Toast.LENGTH_SHORT).show();
-            }
+            });
+            dig.setNegativeButton("Cancela", null);
+            dig.show();
 
 
             return true;
         }
         else if(id == R.id.adicionar_gasto){
             Intent intent = new Intent(this, NovoGastoActivity.class);
+            intent.putExtra("VIAGEM", viagemEscolhida.getId());
             startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void excluirGasto(){
+        if(recyclerView.getAdapter() != null) {
+            for (int i = 0; i < recyclerView.getChildCount(); i++) {
+                CheckBox checkBox = (CheckBox) recyclerView.getChildAt(i).findViewById(R.id.checkBox);
+                if (checkBox.isChecked()) {
+                    Gasto gasto = gastos.get(i);
+                    adapter.remove(gasto);
+                }
+            }
+            ;
+        }
+        else{
+            Toast.makeText(this, "Selecione pelo menos um item.", Toast.LENGTH_SHORT).show();
+        }
     }
 }
 

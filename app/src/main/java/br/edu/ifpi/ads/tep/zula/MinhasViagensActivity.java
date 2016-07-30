@@ -1,6 +1,10 @@
 package br.edu.ifpi.ads.tep.zula;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -8,17 +12,21 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.CheckBox;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import java.util.List;
 
 import br.edu.ifpi.ads.tep.zula.adapters.ViagemAdapter;
 import br.edu.ifpi.ads.tep.zula.dominio.dao.DAO;
+import br.edu.ifpi.ads.tep.zula.dominio.modelo.Viagem;
 
 public class MinhasViagensActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private List viagens;
+    private List<Viagem> viagens;
     private ViagemAdapter adapter;
 
     @Override
@@ -38,6 +46,8 @@ public class MinhasViagensActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
+
+        FloatingActionButton floatingActionButton  = (FloatingActionButton) findViewById(R.id.botao_adicionar_viagem);
     }
 
     @Override
@@ -72,7 +82,54 @@ public class MinhasViagensActivity extends AppCompatActivity {
 
             return true;
         }
+        else if(id == R.id.lixeira){
+            AlertDialog.Builder dig = new AlertDialog.Builder(this);
+            dig.setTitle("Excluir");
+            dig.setMessage("Deseja realmente excluir essa viagem?");
+            dig.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    excluirViagem();
+                }
+            });
+            dig.setNegativeButton("Cancela", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    for (int i = 0; i < recyclerView.getChildCount(); i++) {
+                        CheckBox checkBox = (CheckBox) recyclerView.getChildAt(i).findViewById(R.id.checkViagem);
+                        if (checkBox.isChecked()) {
+                            checkBox.setChecked(false);
+                        }
+                    }
+                }
+            });
+            dig.show();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void excluirViagem() {
+        if(recyclerView.getAdapter() != null) {
+            for (int i = 0; i < recyclerView.getChildCount(); i++) {
+                CheckBox checkBox = (CheckBox) recyclerView.getChildAt(i).findViewById(R.id.checkViagem);
+                if (checkBox.isChecked()) {
+                    Viagem viagem = viagens.get(i);
+                    adapter.remove(viagem);
+                }
+            }
+            ;
+        }
+        else{
+            Toast.makeText(this, "Selecione pelo menos um item.", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+
+    public void adicionarViagem(View view) {
+        Intent intent = new Intent(this, NovaViagemActivity.class);
+        startActivity(intent);
     }
 }
