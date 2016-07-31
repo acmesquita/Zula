@@ -19,6 +19,7 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
+import br.edu.ifpi.ads.tep.zula.dominio.dao.DAO;
 import br.edu.ifpi.ads.tep.zula.dominio.modelo.TipoViagemEnum;
 import br.edu.ifpi.ads.tep.zula.dominio.modelo.Viagem;
 import br.edu.ifpi.ads.tep.zula.util.UtilsData;
@@ -42,7 +43,7 @@ public class NovaViagemActivity extends AppCompatActivity implements View.OnClic
         actionBar.dispatchMenuVisibilityChanged(true);
 
         viagem = new Viagem();
-
+        edtDestino = (EditText) findViewById(R.id.edtDestino);
         spnTipoViagem = (Spinner) findViewById(R.id.spn_tipo_viagem);
         button = (Button) findViewById(R.id.button) ;
         button.setOnClickListener(this);
@@ -56,24 +57,29 @@ public class NovaViagemActivity extends AppCompatActivity implements View.OnClic
         edtData.setOnFocusChangeListener(listener);
         edtData.setKeyListener(null);/*Evitar que o campo seja editado manualmente. - Retitou o teclado.*/
 
+
+        int position = (int) getIntent().getIntExtra("VIAGEM", -1);
+        if(position != -1) {
+            viagem = DAO.getViagemById(position);
+            preencherDados();
+
+        }
     }
 
     @Override
     public void onClick(View v) {
-        edtDestino = (EditText) findViewById(R.id.edtDestino);
-
         try {
             if (edtDestino.getText().toString().trim() != "") {
                 viagem.setDestino(edtDestino.getText().toString());
             }
             else{
-                Toast.makeText(this, "Campo Destino é obrigatório.", Toast.LENGTH_SHORT).show();
+                /*Alert*/
             }
             if (edtData.getText().toString().trim() != ""){
                 viagem.setData(UtilsData.parseForDate(edtData.getText().toString()));
             }
             else{
-                Toast.makeText(this, "Campo Data é obrigatório.", Toast.LENGTH_SHORT).show();
+                /*Alert*/
             }
             viagem.setTipoViagem(TipoViagemEnum.getByDescricao((String) spnTipoViagem.getSelectedItem()));
         } catch (ParseException e) {
@@ -128,4 +134,10 @@ public class NovaViagemActivity extends AppCompatActivity implements View.OnClic
             viagem.setData(data);
         }
     }
+
+    public void preencherDados(){
+        edtData.setText(UtilsData.getData(viagem.getData()));
+        edtDestino.setText(viagem.getDestino());
+    }
+
 }

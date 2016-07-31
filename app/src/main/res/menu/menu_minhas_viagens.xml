@@ -24,4 +24,5 @@
         android:title="@string/lixeira"
         android:icon="@drawable/ic_action_delete"
         app:showAsAction="always" />
+
 </menu>

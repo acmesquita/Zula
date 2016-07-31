@@ -14,6 +14,8 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import br.edu.ifpi.ads.tep.zula.GastosViagemActivity;
+import br.edu.ifpi.ads.tep.zula.MinhasViagensActivity;
+import br.edu.ifpi.ads.tep.zula.NovaViagemActivity;
 import br.edu.ifpi.ads.tep.zula.R;
 import br.edu.ifpi.ads.tep.zula.dominio.dao.DAO;
 import br.edu.ifpi.ads.tep.zula.dominio.modelo.Gasto;
@@ -69,6 +71,12 @@ public class ViagemAdapter extends RecyclerView.Adapter<ViagemAdapter.ViagemView
         holder.txtData.setText(UtilsData.getData(viagem.getData()));
     }
 
+    public void remove(Viagem viagensSelecionadas){
+        int position = viagens.indexOf(viagensSelecionadas);
+        viagens.remove(viagem);
+        notifyItemRemoved(position);
+    }
+
     public void remove(List<Viagem> viagensSelecionadas){
         for(Viagem viagem:viagensSelecionadas){
             int position = viagens.indexOf(viagem);
@@ -81,7 +89,18 @@ public class ViagemAdapter extends RecyclerView.Adapter<ViagemAdapter.ViagemView
         return viagens.size();
     }
 
-    public class ViagemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public List<Viagem> getViagens() {
+        return viagens;
+    }
+
+    public void atualizar(Viagem viagem) {
+        int i = viagens.indexOf(viagem);
+        viagens.remove(i);
+        viagens.add(viagem);
+    }
+
+
+    public class ViagemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
 
         Context context;
         ImageView icon;
@@ -97,19 +116,30 @@ public class ViagemAdapter extends RecyclerView.Adapter<ViagemAdapter.ViagemView
             this.txtValorViagem = (TextView) itemView.findViewById(R.id.txt_valor_viagem);
             this.txtData = (TextView) itemView.findViewById(R.id.txt_data);
             itemView.setOnClickListener(this);
-
+            itemView.setLongClickable(true);
+            itemView.setOnLongClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(context, "Id da view :" +v.getId(), Toast.LENGTH_SHORT).show();
-            int idDestino = DAO.getIdByDestino(txtTitulo.getText().toString());
-            if(idDestino != -1) {
-            /*Chamar a Activity de gastos passando a viagem */
-                Intent intent = new Intent(itemView.getContext(), GastosViagemActivity.class);
-                intent.putExtra("VIAGEM", idDestino);
-                itemView.getContext().startActivity(intent);
-            }
+            Intent intent = new Intent(itemView.getContext(), GastosViagemActivity.class);
+            intent.putExtra("VIAGEM", this.getAdapterPosition());
+            itemView.getContext().startActivity(intent);
+
+        }
+
+
+        @Override
+        public boolean onLongClick(View v) {
+
+            int i = this.getAdapterPosition();
+
+            Intent intent = new Intent(itemView.getContext(), NovaViagemActivity.class);
+            intent.putExtra("VIAGEM", i);
+            if(itemView.getContext() instanceof MinhasViagensActivity){
+                ((MinhasViagensActivity)itemView.getContext()).startActivityForResult(intent, 0);}
+
+            return true;
         }
     }
 }

@@ -9,6 +9,7 @@ import java.util.Date;
  */
 public class Gasto implements Serializable{
 
+    private int id = -1;
     private String nome;
     private Viagem viagem;
     private TipoGastoEnum tipoDeGasto;
@@ -76,5 +77,13 @@ public class Gasto implements Serializable{
         result = 31 * result + getData().hashCode();
         result = 31 * result + getValor().hashCode();
         return result;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

@@ -97,7 +97,7 @@ public class GastosViagemActivity extends AppCompatActivity {
         else if(id == R.id.adicionar_gasto){
             Intent intent = new Intent(this, NovoGastoActivity.class);
             intent.putExtra("VIAGEM", viagemEscolhida.getId());
-            startActivity(intent);
+            startActivityForResult(intent, 0);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -119,6 +119,13 @@ public class GastosViagemActivity extends AppCompatActivity {
         else{
             Toast.makeText(this, "Selecione pelo menos um item.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        adapter.setGastos(viagemEscolhida.getGastos());
+        recyclerView.setAdapter(adapter);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
 

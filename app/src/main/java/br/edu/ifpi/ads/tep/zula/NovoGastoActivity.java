@@ -34,6 +34,7 @@ public class NovoGastoActivity extends AppCompatActivity implements View.OnClick
     private Button btn_salvar;
     private EditText data;
     private Gasto gasto ;
+    private Viagem viagemEscolhida;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +45,7 @@ public class NovoGastoActivity extends AppCompatActivity implements View.OnClick
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setTitle("Novo Gastos");
         actionBar.dispatchMenuVisibilityChanged(true);
-        gasto = new Gasto();
+
 
         int position = (int) getIntent().getIntExtra("VIAGEM", -1);
 
@@ -79,28 +80,50 @@ public class NovoGastoActivity extends AppCompatActivity implements View.OnClick
         data.setOnFocusChangeListener(listener);
         data.setKeyListener(null);/*Evitar que o campo seja editado manualmente. - Retitou o teclado.*/
 
-    }
-
-
-    @Override
-    public void onClick(View v) {
-        String viagem = (String) spn_viagem.getSelectedItem();
-        String tipo_gasto = (String) spn_tipo_gasto.getSelectedItem();
         valor = (EditText) findViewById(R.id.edt_valor);
-        Viagem viagemEscolhida = null;
+
+        String viagem = (String) spn_viagem.getSelectedItem();
         for(Viagem viagem1 : DAO.getViagens()){
             if(viagem1.getDestino().equals(viagem)){
                 viagemEscolhida = viagem1;
                 break;
             }
         }
+        gasto = (Gasto) getIntent().getSerializableExtra("GASTO");
+        if(gasto != null){
+            preencherGasto();
+        }
+        else{
+            gasto = new Gasto();
+        }
+
+    }
+
+    private void preencherGasto() {
+        data.setText(UtilsData.getData(gasto.getData()));
+        valor.setText(gasto.getValor().toString());
+    }
+
+
+    @Override
+    public void onClick(View v) {
+
+        String tipo_gasto = (String) spn_tipo_gasto.getSelectedItem();
 
         gasto.setTipoDeGasto(TipoGastoEnum.getTipoByDesc(tipo_gasto) );
 
         if(valor.getText().toString().trim() != ""){
             gasto.setValor(new BigDecimal(valor.getText().toString()));
             gasto.setViagem(viagemEscolhida);
-            viagemEscolhida.getGastos().add(gasto);
+            if(gasto.getId() != -1){
+                Gasto gastoEscolhido= viagemEscolhida.getGastos().get(gasto.getId());
+                viagemEscolhida.getGastos().remove(gastoEscolhido);
+                viagemEscolhida.getGastos().add(gasto);
+            }
+            else{
+                gasto.setId(viagemEscolhida.getGastos().size());
+                viagemEscolhida.getGastos().add(gasto);
+            }
 
             finish();
         }

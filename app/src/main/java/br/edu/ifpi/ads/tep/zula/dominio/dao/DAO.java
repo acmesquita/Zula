@@ -20,10 +20,12 @@ public class DAO {
 
     static{
         Viagem v = new Viagem();
+        v.setId(0);
         v.setTipoViagem(TipoViagemEnum.LAZER);
         v.setDestino("Zica");
         v.setData(new Date());
         Gasto g =  new Gasto();
+        g.setId(0);
         g.setData(new Date());
         g.setValor(BigDecimal.TEN);
         g.setTipoDeGasto(TipoGastoEnum.ALIMENTACAO);

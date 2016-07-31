@@ -1,6 +1,7 @@
 package br.edu.ifpi.ads.tep.zula.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +12,12 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import br.edu.ifpi.ads.tep.zula.GastosViagemActivity;
+import br.edu.ifpi.ads.tep.zula.MinhasViagensActivity;
+import br.edu.ifpi.ads.tep.zula.NovaViagemActivity;
+import br.edu.ifpi.ads.tep.zula.NovoGastoActivity;
 import br.edu.ifpi.ads.tep.zula.R;
+import br.edu.ifpi.ads.tep.zula.dominio.dao.DAO;
 import br.edu.ifpi.ads.tep.zula.dominio.modelo.Gasto;
 import br.edu.ifpi.ads.tep.zula.dominio.modelo.TipoGastoEnum;
 import br.edu.ifpi.ads.tep.zula.dominio.modelo.Viagem;
@@ -72,7 +78,11 @@ public class GastoAdapter extends RecyclerView.Adapter<GastoAdapter.GastoViewHol
         }
     }
 
-    public class GastoViewHolder extends RecyclerView.ViewHolder{
+    public void setGastos(List<Gasto> gastos) {
+        this.gastos = gastos;
+    }
+
+    public class GastoViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener{
 
         Context context;
         ImageView icon;
@@ -89,6 +99,23 @@ public class GastoAdapter extends RecyclerView.Adapter<GastoAdapter.GastoViewHol
             this.txtValorViagem = (TextView) itemView.findViewById(R.id.txt_valor_viagem);
             this.txtData = (TextView) itemView.findViewById(R.id.txt_data);
             this.checkBox = (CheckBox) itemView.findViewById(R.id.checkBox);
+            itemView.setOnLongClickListener(this);
+            itemView.setLongClickable(true);
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+
+            int position = this.getAdapterPosition();
+            Gasto gasto1 = gastos.get(position);
+            Intent intent = new Intent(itemView.getContext(), NovoGastoActivity.class);
+            intent.putExtra("GASTO", gasto1);
+            intent.putExtra("VIAGEM", gasto1.getViagem().getId());
+            if(itemView.getContext() instanceof GastosViagemActivity)
+                ((GastosViagemActivity)itemView.getContext()).startActivityForResult(intent, 0);
+
+
+            return true;
         }
     }
 

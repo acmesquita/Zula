@@ -96,10 +96,7 @@ public class MinhasViagensActivity extends AppCompatActivity {
     }
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(id ==  R.id.action_search){
-            return true;
-        }
-        else if (id == R.id.action_share) {
+        if (id == R.id.action_share) {
             /*Criar lista e criar o compartilhar varias viagens*/
             List<Viagem> viagensSelecionadas = new ArrayList<>();
             if(recyclerView.getAdapter() != null) {
@@ -200,12 +197,19 @@ public class MinhasViagensActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == 0){
-            Bundle extras = data.getExtras();
-            if(extras != null){
-                Viagem viagem = (Viagem) extras.getSerializable("VIAGEM");
-                List<Viagem> viagens = DAO.getViagens();
-                viagem.setId(viagens.size());
-                viagens.add(viagem);
+            if(data!= null) {
+                Bundle extras = data.getExtras();
+                if (extras != null) {
+                    Viagem viagem = (Viagem) extras.getSerializable("VIAGEM");
+                    List<Viagem> viagens = DAO.getViagens();
+                    if (viagens.contains(viagem)) {
+                        adapter.atualizar(viagem);
+                        recyclerView.setAdapter(adapter);
+                    } else {
+                        viagem.setId(viagens.size());
+                        viagens.add(viagem);
+                    }
+                }
             }
         }
         /*Atualizar listas*/

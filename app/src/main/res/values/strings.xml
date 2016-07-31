@@ -18,4 +18,5 @@
     <string name="lbl_data">Data D</string>
     <string name="lixeira">Excluir</string>
     <string name="novo_gasto">Novo Gasto</string>
+    <string name="editar">Editar</string>
 </resources>

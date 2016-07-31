@@ -20,7 +20,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:clickable="true"
-        android:onClick="onOpcaoNovaViagem">
+        android:onClick="onOpcaoNovaViagem"
+        android:layout_marginBottom="20dp">
 
         <ImageView
             android:layout_width="75dp"
@@ -46,7 +47,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:onClick="onOpcaoNovoGasto">
+        android:onClick="onOpcaoNovoGasto"
+        android:layout_marginBottom="20dp">
 
         <ImageView
             android:layout_width="75dp"
