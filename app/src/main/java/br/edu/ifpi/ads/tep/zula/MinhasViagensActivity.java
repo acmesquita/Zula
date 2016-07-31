@@ -51,7 +51,6 @@ public class MinhasViagensActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
-
     }
 
     @Override
@@ -73,6 +72,24 @@ public class MinhasViagensActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                List<Viagem> viagensSelecionadas = new ArrayList<>();
+                if(recyclerView.getAdapter() != null) {
+                    for (int i = 0; i < recyclerView.getChildCount(); i++) {
+                        Viagem viagem = viagens.get(i);
+                        if (viagem.getDestino().toUpperCase().equals(newText.toUpperCase()) ||
+                                viagem.getDestino().toUpperCase().contains(newText.toUpperCase())) {
+                            viagensSelecionadas.add(viagem);
+                        }
+                    }
+                }
+                if(!viagensSelecionadas.isEmpty()){
+                    adapter.setViagens(viagensSelecionadas);
+                    recyclerView.setAdapter(adapter);
+                }
+                else if(viagensSelecionadas.isEmpty() && newText.trim() == ""){
+                    adapter.setViagens(DAO.getViagens());
+                    recyclerView.setAdapter(adapter);
+                }
                 return false;
             }
         };
@@ -191,7 +208,9 @@ public class MinhasViagensActivity extends AppCompatActivity {
                 viagens.add(viagem);
             }
         }
-
+        /*Atualizar listas*/
+        adapter.setViagens(DAO.getViagens());
+        recyclerView.setAdapter(adapter);
         super.onActivityResult(requestCode, resultCode, data);
     }
 }

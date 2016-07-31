@@ -35,6 +35,11 @@ public class ViagemAdapter extends RecyclerView.Adapter<ViagemAdapter.ViagemView
         this.viagens = viagens;
     }
 
+    public void setViagens(List<Viagem> viagens){
+        this.viagens = viagens;
+        notifyItemInserted(viagens.size());
+    }
+
     @Override
     public ViagemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.layout_viagem, parent, false);
