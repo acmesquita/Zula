@@ -94,12 +94,6 @@ public class GastosViagemActivity extends AppCompatActivity {
 
             return true;
         }
-        else if(id == R.id.adicionar_gasto){
-            Intent intent = new Intent(this, NovoGastoActivity.class);
-            intent.putExtra("VIAGEM", viagemEscolhida.getId());
-            startActivityForResult(intent, 0);
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -126,6 +120,12 @@ public class GastosViagemActivity extends AppCompatActivity {
         adapter.setGastos(viagemEscolhida.getGastos());
         recyclerView.setAdapter(adapter);
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void adicionarGasto(View view) {
+        Intent intent = new Intent(this, NovoGastoActivity.class);
+        intent.putExtra("VIAGEM", viagemEscolhida.getId());
+        startActivityForResult(intent, 0);
     }
 }
 
