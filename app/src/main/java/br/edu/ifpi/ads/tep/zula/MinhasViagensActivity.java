@@ -172,7 +172,7 @@ public class MinhasViagensActivity extends AppCompatActivity {
     }
 
     private void excluirViagem() {
-       /* List<Viagem> viagemsSelecionadas = new ArrayList<>();
+        List<Viagem> viagemsSelecionadas = new ArrayList<>();
         if(recyclerView.getAdapter() != null) {
             for (int i = 0; i < recyclerView.getChildCount(); i++) {
                 CheckBox checkBox = (CheckBox) recyclerView.getChildAt(i).findViewById(R.id.checkViagem);
@@ -186,7 +186,7 @@ public class MinhasViagensActivity extends AppCompatActivity {
         }
         else{
             Toast.makeText(this, "Selecione pelo menos um item.", Toast.LENGTH_SHORT).show();
-        }*/
+        }
 
     }
 

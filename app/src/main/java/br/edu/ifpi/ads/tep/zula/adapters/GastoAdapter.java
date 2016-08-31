@@ -24,6 +24,7 @@ import br.edu.ifpi.ads.tep.zula.dominio.modelo.Gasto;
 import br.edu.ifpi.ads.tep.zula.dominio.modelo.TipoGastoEnum;
 import br.edu.ifpi.ads.tep.zula.dominio.modelo.Viagem;
 import br.edu.ifpi.ads.tep.zula.util.UtilsData;
+import io.realm.Realm;
 
 /**
  * Created by catharina on 27/07/16.
@@ -32,6 +33,7 @@ public class GastoAdapter extends RecyclerView.Adapter<GastoAdapter.GastoViewHol
 
     private Context context;
     private List<Gasto> gastos;
+    private Realm realm;
 
     public GastoAdapter(Context context, List<Gasto> gastos) {
         this.context = context;
@@ -73,9 +75,12 @@ public class GastoAdapter extends RecyclerView.Adapter<GastoAdapter.GastoViewHol
     }
 
     public void remove(List<Gasto> gastosSelecionados){
+        realm = Realm.getDefaultInstance();
         for(Gasto gasto :gastosSelecionados){
             int position = gastos.indexOf(gasto);
-            gastos.remove(position);
+            realm.beginTransaction();
+            gasto.deleteFromRealm();
+            realm.commitTransaction();
             notifyItemRemoved(position);
         }
     }

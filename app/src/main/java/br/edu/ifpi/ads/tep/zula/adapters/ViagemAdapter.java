@@ -23,6 +23,7 @@ import br.edu.ifpi.ads.tep.zula.dominio.modelo.Gasto;
 import br.edu.ifpi.ads.tep.zula.dominio.modelo.TipoViagemEnum;
 import br.edu.ifpi.ads.tep.zula.dominio.modelo.Viagem;
 import br.edu.ifpi.ads.tep.zula.util.UtilsData;
+import io.realm.Realm;
 
 /**
  * Created by catharina on 26/07/16.
@@ -32,6 +33,7 @@ public class ViagemAdapter extends RecyclerView.Adapter<ViagemAdapter.ViagemView
     private Context context;
     private List<Viagem> viagens;
     private Viagem viagem;
+    private Realm realm;
 
     public ViagemAdapter(Context context, List viagens) {
         this.context = context;
@@ -79,9 +81,12 @@ public class ViagemAdapter extends RecyclerView.Adapter<ViagemAdapter.ViagemView
     }
 
     public void remove(List<Viagem> viagensSelecionadas){
+        realm = Realm.getDefaultInstance();
         for(Viagem viagem:viagensSelecionadas){
             int position = viagens.indexOf(viagem);
-            viagens.remove(viagem);
+            realm.beginTransaction();
+            viagem.deleteFromRealm();
+            realm.commitTransaction();
             notifyItemRemoved(position);
         }
     }
