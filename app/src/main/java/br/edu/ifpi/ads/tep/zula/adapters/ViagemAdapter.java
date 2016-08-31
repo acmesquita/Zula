@@ -141,7 +141,7 @@ public class ViagemAdapter extends RecyclerView.Adapter<ViagemAdapter.ViagemView
             int i = this.getAdapterPosition();
 
             Intent intent = new Intent(itemView.getContext(), NovaViagemActivity.class);
-            intent.putExtra("VIAGEM", viagens.get(i));
+            intent.putExtra("VIAGEM", viagens.get(i).getId());
             if(itemView.getContext() instanceof MinhasViagensActivity){
                 ((MinhasViagensActivity)itemView.getContext()).startActivityForResult(intent, 0);}
 

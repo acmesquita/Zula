@@ -116,8 +116,8 @@ public class GastoAdapter extends RecyclerView.Adapter<GastoAdapter.GastoViewHol
             int position = this.getAdapterPosition();
             Gasto gasto1 = gastos.get(position);
             Intent intent = new Intent(itemView.getContext(), NovoGastoActivity.class);
-            intent.putExtra("GASTO",  gasto1);
-            intent.putExtra("VIAGEM", gasto1.getViagem());
+            intent.putExtra("GASTO",  gasto1.getId());
+            intent.putExtra("VIAGEM", gasto1.getViagem().getId());
             if(itemView.getContext() instanceof GastosViagemActivity)
                 ((GastosViagemActivity)itemView.getContext()).startActivityForResult(intent, 0);
 

@@ -95,12 +95,14 @@ public class NovoGastoActivity extends AppCompatActivity implements View.OnClick
                 break;
             }
         }
-        gasto = (Gasto) getIntent().getSerializableExtra("GASTO");
-        if(gasto != null){
+        String idgasto = getIntent().getStringExtra("GASTO");
+        dao = DAO.getInstance(Realm.getDefaultInstance());
+        gasto = dao.getGastoById(idgasto);
+        if(this.gasto != null){
             preencherGasto();
         }
         else{
-            gasto = new Gasto();
+            this.gasto = new Gasto();
         }
 
     }
@@ -113,33 +115,26 @@ public class NovoGastoActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onClick(View v) {
-        dao = DAO.getInstance(Realm.getDefaultInstance());
+        realm.beginTransaction();
         String tipo_gasto = (String) spn_tipo_gasto.getSelectedItem();
-
         gasto.setTipoDeGasto(TipoGastoEnum.getTipoByDesc(tipo_gasto));
 
-        if(valor.getText().toString().trim() != ""){
+        if (valor.getText().toString().trim() != "") {
             gasto.setValor(new BigDecimal(valor.getText().toString()));
-            if(viagemEscolhida != null) {
-                gasto.setViagem(viagemEscolhida);
-            }else{
+            if (viagemEscolhida == null) {
                 viagemEscolhida = dao.getViagemByDestino((String) spn_viagem.getSelectedItem()).first();
             }
-            realm.beginTransaction();
-            viagemEscolhida.getGastos().add(viagemEscolhida.getGastos().size(),gasto);
+            gasto.setViagem(viagemEscolhida);
+            if(!viagemEscolhida.getGastos().contains(gasto)){viagemEscolhida.getGastos().add(gasto);}
             realm.commitTransaction();
-            dao.saveGasto(gasto);
             finish();
-        }
-        else{
-            AlertDialog.Builder dig = new AlertDialog.Builder(this);
+        } else {
+            AlertDialog.Builder dig = new AlertDialog.Builder(NovoGastoActivity.this);
             dig.setTitle("Erro");
             dig.setMessage("Insira um valor.");
-            dig.setNegativeButton("Ok",null);
+            dig.setNegativeButton("Ok", null);
             dig.show();
         }
-
-
     }
 
     private void exibiData(){
@@ -177,7 +172,9 @@ public class NovoGastoActivity extends AppCompatActivity implements View.OnClick
             data.setText(dataFormatada);
 
             Date data = UtilsData.getDate(year, monthOfYear, dayOfMonth);
+            realm.beginTransaction();
             gasto.setData(data);
+            realm.commitTransaction();
         }
     }
 }
