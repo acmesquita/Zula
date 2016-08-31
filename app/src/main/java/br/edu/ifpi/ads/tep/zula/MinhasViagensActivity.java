@@ -27,6 +27,7 @@ import br.edu.ifpi.ads.tep.zula.dominio.modelo.Gasto;
 import br.edu.ifpi.ads.tep.zula.dominio.modelo.Viagem;
 import br.edu.ifpi.ads.tep.zula.util.UtilsData;
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class MinhasViagensActivity extends AppCompatActivity {
 
@@ -74,24 +75,10 @@ public class MinhasViagensActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-              /*  List<Viagem> viagensSelecionadas = new ArrayList<>();
-                if(recyclerView.getAdapter() != null) {
-                    for (int i = 0; i < recyclerView.getChildCount(); i++) {
-                        Viagem viagem = viagens.get(i);
-                        if (viagem.getDestino().toUpperCase().equals(newText.toUpperCase()) ||
-                                viagem.getDestino().toUpperCase().contains(newText.toUpperCase())) {
-                            viagensSelecionadas.add(viagem);
-                        }
-                    }
-                }
-                if(!viagensSelecionadas.isEmpty()){
-                    adapter.setViagens(viagensSelecionadas);
-                    recyclerView.setAdapter(adapter);
-                }
-                else if(viagensSelecionadas.isEmpty() && newText.trim() == ""){
-                    adapter.setViagens(DAO.getViagens());
-                    recyclerView.setAdapter(adapter);
-                }*/
+                dao = DAO.getInstance(Realm.getDefaultInstance());
+                RealmResults<Viagem> viagemByDestino = dao.getViagemByDestino(newText);
+                adapter.setViagens(viagemByDestino);
+                recyclerView.setAdapter(adapter);
                 return false;
             }
         };
