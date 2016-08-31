@@ -3,6 +3,9 @@ package br.edu.ifpi.ads.tep.zula.dominio.modelo;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmObject;
+
 /**
  * Created by djas on 20/07/16.
  */

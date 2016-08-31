@@ -2,6 +2,7 @@ package br.edu.ifpi.ads.tep.zula;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import br.edu.ifpi.ads.tep.zula.dominio.dao.DAO;
 import br.edu.ifpi.ads.tep.zula.dominio.modelo.TipoViagemEnum;
 import br.edu.ifpi.ads.tep.zula.dominio.modelo.Viagem;
 import br.edu.ifpi.ads.tep.zula.util.UtilsData;
+import io.realm.Realm;
 
 public class NovaViagemActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -31,6 +33,7 @@ public class NovaViagemActivity extends AppCompatActivity implements View.OnClic
     private Spinner spnTipoViagem;
     private Button button;
     private Viagem viagem;
+    private DAO dao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,9 +61,10 @@ public class NovaViagemActivity extends AppCompatActivity implements View.OnClic
         edtData.setKeyListener(null);/*Evitar que o campo seja editado manualmente. - Retitou o teclado.*/
 
 
-        int position = (int) getIntent().getIntExtra("VIAGEM", -1);
-        if(position != -1) {
-            viagem = DAO.getViagemById(position);
+        String idViagem = getIntent().getStringExtra("VIAGEM");
+        if(idViagem != null) {
+            dao = DAO.getInstance(Realm.getDefaultInstance());
+            this.viagem = dao.getViagemById(idViagem);
             preencherDados();
 
         }
@@ -88,10 +92,8 @@ public class NovaViagemActivity extends AppCompatActivity implements View.OnClic
             setResult(RESULT_CANCELED);
             finish();
         }
-
-        Intent intent = new Intent();
-        intent.putExtra("VIAGEM", viagem);
-        setResult(RESULT_OK, intent);
+        dao = DAO.getInstance(Realm.getDefaultInstance());
+        dao.saveVigem(viagem);
         finish();
 
     }

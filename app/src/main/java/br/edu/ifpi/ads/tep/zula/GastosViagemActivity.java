@@ -2,6 +2,7 @@ package br.edu.ifpi.ads.tep.zula;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +24,7 @@ import br.edu.ifpi.ads.tep.zula.adapters.GastoAdapter;
 import br.edu.ifpi.ads.tep.zula.dominio.dao.DAO;
 import br.edu.ifpi.ads.tep.zula.dominio.modelo.Gasto;
 import br.edu.ifpi.ads.tep.zula.dominio.modelo.Viagem;
+import io.realm.Realm;
 
 public class GastosViagemActivity extends AppCompatActivity {
 
@@ -30,6 +32,8 @@ public class GastosViagemActivity extends AppCompatActivity {
     private List<Gasto> gastos;
     private GastoAdapter adapter;
     private Viagem viagemEscolhida;
+    private DAO dao;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,9 +46,10 @@ public class GastosViagemActivity extends AppCompatActivity {
 
         /*Receber a viagem*/
         /*Receber o pamâmetro*/
-        int position = (int) getIntent().getIntExtra("VIAGEM", -1);
-        if(position != -1){
-            viagemEscolhida = DAO.getViagemById(position);
+        String viagem = getIntent().getStringExtra("VIAGEM");
+        if(viagem != null){
+            dao = DAO.getInstance(Realm.getDefaultInstance());
+            viagemEscolhida = dao.getViagemById(viagem);
             gastos = viagemEscolhida.getGastos();
             adapter = new GastoAdapter(this,gastos);
 

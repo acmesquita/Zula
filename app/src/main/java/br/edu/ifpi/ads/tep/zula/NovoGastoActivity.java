@@ -1,6 +1,7 @@
 package br.edu.ifpi.ads.tep.zula;
 
 import android.app.DatePickerDialog;
+import android.os.Parcelable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +26,7 @@ import br.edu.ifpi.ads.tep.zula.dominio.modelo.Gasto;
 import br.edu.ifpi.ads.tep.zula.dominio.modelo.TipoGastoEnum;
 import br.edu.ifpi.ads.tep.zula.dominio.modelo.Viagem;
 import br.edu.ifpi.ads.tep.zula.util.UtilsData;
+import io.realm.Realm;
 
 public class NovoGastoActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -35,6 +37,8 @@ public class NovoGastoActivity extends AppCompatActivity implements View.OnClick
     private EditText data;
     private Gasto gasto ;
     private Viagem viagemEscolhida;
+    private DAO dao;
+    private Realm realm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +51,14 @@ public class NovoGastoActivity extends AppCompatActivity implements View.OnClick
         actionBar.dispatchMenuVisibilityChanged(true);
 
 
-        int position = (int) getIntent().getIntExtra("VIAGEM", -1);
+        String viagem2 = getIntent().getStringExtra("VIAGEM");
 
         spn_viagem = (Spinner) findViewById(R.id.spn_viagem);
         List<String> nomeViagens = new ArrayList<>();
-
-        for(Viagem viagem : DAO.getViagens()){
-            if(position != -1){
-                if(viagem.getId() == position){
+        dao = DAO.getInstance(Realm.getDefaultInstance());
+        for(Viagem viagem : dao.getViagemAll()){
+            if(viagem2 != null){
+                if(viagem.getId().equalsIgnoreCase(viagem2)){
                     nomeViagens.add(viagem.getDestino());
                     break;
                 }
@@ -83,7 +87,9 @@ public class NovoGastoActivity extends AppCompatActivity implements View.OnClick
         valor = (EditText) findViewById(R.id.edt_valor);
 
         String viagem = (String) spn_viagem.getSelectedItem();
-        for(Viagem viagem1 : DAO.getViagens()){
+        realm = Realm.getDefaultInstance();
+        dao = DAO.getInstance(realm);
+        for(Viagem viagem1 : dao.getViagemAll()){
             if(viagem1.getDestino().equals(viagem)){
                 viagemEscolhida = viagem1;
                 break;
@@ -101,30 +107,28 @@ public class NovoGastoActivity extends AppCompatActivity implements View.OnClick
 
     private void preencherGasto() {
         data.setText(UtilsData.getData(gasto.getData()));
-        valor.setText(gasto.getValor().toString());
+        valor.setText(gasto.getValor()+"");
     }
 
 
     @Override
     public void onClick(View v) {
-
+        dao = DAO.getInstance(Realm.getDefaultInstance());
         String tipo_gasto = (String) spn_tipo_gasto.getSelectedItem();
 
-        gasto.setTipoDeGasto(TipoGastoEnum.getTipoByDesc(tipo_gasto) );
+        gasto.setTipoDeGasto(TipoGastoEnum.getTipoByDesc(tipo_gasto));
 
         if(valor.getText().toString().trim() != ""){
             gasto.setValor(new BigDecimal(valor.getText().toString()));
-            gasto.setViagem(viagemEscolhida);
-            if(gasto.getId() != -1){
-                Gasto gastoEscolhido= viagemEscolhida.getGastos().get(gasto.getId());
-                viagemEscolhida.getGastos().remove(gastoEscolhido);
-                viagemEscolhida.getGastos().add(gasto);
+            if(viagemEscolhida != null) {
+                gasto.setViagem(viagemEscolhida);
+            }else{
+                viagemEscolhida = dao.getViagemByDestino((String) spn_viagem.getSelectedItem()).first();
             }
-            else{
-                gasto.setId(viagemEscolhida.getGastos().size());
-                viagemEscolhida.getGastos().add(gasto);
-            }
-
+            realm.beginTransaction();
+            viagemEscolhida.getGastos().add(viagemEscolhida.getGastos().size(),gasto);
+            realm.commitTransaction();
+            dao.saveGasto(gasto);
             finish();
         }
         else{

@@ -2,6 +2,7 @@ package br.edu.ifpi.ads.tep.zula.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.List;
 
 import br.edu.ifpi.ads.tep.zula.GastosViagemActivity;
@@ -61,7 +63,7 @@ public class GastoAdapter extends RecyclerView.Adapter<GastoAdapter.GastoViewHol
         }
 
         holder.txtData.setText(UtilsData.getData(gasto.getData()));
-        holder.txtValorViagem.setText("R$ "+gasto.getValor().toString());
+        holder.txtValorViagem.setText("R$ "+gasto.getValor());
 
     }
 
@@ -109,8 +111,8 @@ public class GastoAdapter extends RecyclerView.Adapter<GastoAdapter.GastoViewHol
             int position = this.getAdapterPosition();
             Gasto gasto1 = gastos.get(position);
             Intent intent = new Intent(itemView.getContext(), NovoGastoActivity.class);
-            intent.putExtra("GASTO", gasto1);
-            intent.putExtra("VIAGEM", gasto1.getViagem().getId());
+            intent.putExtra("GASTO",  gasto1);
+            intent.putExtra("VIAGEM", gasto1.getViagem());
             if(itemView.getContext() instanceof GastosViagemActivity)
                 ((GastosViagemActivity)itemView.getContext()).startActivityForResult(intent, 0);
 

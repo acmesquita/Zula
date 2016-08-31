@@ -2,6 +2,7 @@ package br.edu.ifpi.ads.tep.zula.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,14 +61,14 @@ public class ViagemAdapter extends RecyclerView.Adapter<ViagemAdapter.ViagemView
         else{
             holder.icon.setImageResource(R.drawable.aperto_maoes);
         }
-        BigDecimal valorTotal = BigDecimal.ZERO;
+        double valorTotal = 0;
         for(Gasto gasto : viagem.getGastos()){
-            if(gasto.getValor() != null){
-                valorTotal = valorTotal.add( gasto.getValor());
+            if(gasto != null){
+                valorTotal +=gasto.getValor();
             }
         }
 
-        holder.txtValorViagem.setText("R$ "+valorTotal.toString());
+        holder.txtValorViagem.setText("R$ "+valorTotal);
         holder.txtData.setText(UtilsData.getData(viagem.getData()));
     }
 
@@ -123,7 +124,7 @@ public class ViagemAdapter extends RecyclerView.Adapter<ViagemAdapter.ViagemView
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(itemView.getContext(), GastosViagemActivity.class);
-            intent.putExtra("VIAGEM", this.getAdapterPosition());
+            intent.putExtra("VIAGEM", viagens.get(this.getAdapterPosition()).getId());
             itemView.getContext().startActivity(intent);
 
         }
@@ -135,7 +136,7 @@ public class ViagemAdapter extends RecyclerView.Adapter<ViagemAdapter.ViagemView
             int i = this.getAdapterPosition();
 
             Intent intent = new Intent(itemView.getContext(), NovaViagemActivity.class);
-            intent.putExtra("VIAGEM", i);
+            intent.putExtra("VIAGEM", viagens.get(i));
             if(itemView.getContext() instanceof MinhasViagensActivity){
                 ((MinhasViagensActivity)itemView.getContext()).startActivityForResult(intent, 0);}
 

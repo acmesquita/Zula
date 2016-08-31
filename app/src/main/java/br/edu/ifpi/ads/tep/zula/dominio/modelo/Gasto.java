@@ -3,18 +3,29 @@ package br.edu.ifpi.ads.tep.zula.dominio.modelo;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.UUID;
+
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by catharina on 20/07/16.
+ *
+ * Change by catharina on 30/08/16
  */
-public class Gasto implements Serializable{
+public class Gasto extends RealmObject implements Serializable{
 
-    private int id = -1;
+    @PrimaryKey
+    private String id;
     private String nome;
     private Viagem viagem;
-    private TipoGastoEnum tipoDeGasto;
+    private String tipoDeGasto;
     private Date data;
-    private BigDecimal valor;
+    private double valor;
+
+    public Gasto(){
+        id = UUID.randomUUID().toString();
+    }
 
     public Viagem getViagem() {
         return viagem;
@@ -25,11 +36,11 @@ public class Gasto implements Serializable{
     }
 
     public TipoGastoEnum getTipoDeGasto() {
-        return tipoDeGasto;
+        return TipoGastoEnum.getTipoByDesc(tipoDeGasto);
     }
 
     public void setTipoDeGasto(TipoGastoEnum tipoDeGasto) {
-        this.tipoDeGasto = tipoDeGasto;
+        this.tipoDeGasto = tipoDeGasto.getDescricao();
     }
 
     public Date getData() {
@@ -40,12 +51,12 @@ public class Gasto implements Serializable{
         this.data = data;
     }
 
-    public BigDecimal getValor() {
+    public double getValor() {
         return valor;
     }
 
     public void setValor(BigDecimal valor) {
-        this.valor = valor;
+        this.valor = valor.doubleValue();
     }
 
     public String getNome() {
@@ -56,34 +67,11 @@ public class Gasto implements Serializable{
         this.nome = nome;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Gasto gasto = (Gasto) o;
-        if (!getViagem().equals(gasto.getViagem())) return false;
-        if (getTipoDeGasto() != gasto.getTipoDeGasto()) return false;
-        if (!getData().equals(gasto.getData())) return false;
-        return getValor().equals(gasto.getValor());
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = 0;
-        result = 31 * result + getViagem().hashCode();
-        result = 31 * result + getTipoDeGasto().hashCode();
-        result = 31 * result + getData().hashCode();
-        result = 31 * result + getValor().hashCode();
-        return result;
-    }
-
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 }

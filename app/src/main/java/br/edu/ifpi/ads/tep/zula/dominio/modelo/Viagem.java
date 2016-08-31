@@ -1,38 +1,49 @@
 package br.edu.ifpi.ads.tep.zula.dominio.modelo;
 
+import android.os.Parcelable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
+
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by djas on 20/07/16.
+ *
+ * Change by Catharina 30/08/16
  */
-public class Viagem implements Serializable {
+public class Viagem extends RealmObject implements Serializable {
 
-    private int id;
-    private TipoViagemEnum tipoViagem;
+    @PrimaryKey
+    private String id;
+    private String tipoViagem;
     private String destino;
     private Date data;
-    private List<Gasto> gastos;
+    private RealmList<Gasto> gastos;
 
     public Viagem(){
-        this.gastos = new ArrayList<Gasto>();
+        id = UUID.randomUUID().toString();
+        this.gastos = new RealmList<>();
     }
 
-    public Viagem(TipoViagemEnum tipoViagem, String destino, Date data, List<Gasto> gastos) {
-        this.tipoViagem = tipoViagem;
+    public Viagem(TipoViagemEnum tipoViagem, String destino, Date data, RealmList<Gasto> gastos) {
+        this.tipoViagem = tipoViagem.getDescricao();
         this.destino = destino;
         this.data = data;
         this.gastos = gastos;
     }
 
     public TipoViagemEnum getTipoViagem() {
-        return tipoViagem;
+        return TipoViagemEnum.getByDescricao(tipoViagem);
     }
 
     public void setTipoViagem(TipoViagemEnum tipoViagem) {
-        this.tipoViagem = tipoViagem;
+        this.tipoViagem = tipoViagem.getDescricao();
     }
 
     public String getDestino() {
@@ -51,19 +62,19 @@ public class Viagem implements Serializable {
         this.data = data;
     }
 
-    public List<Gasto> getGastos() {
+    public RealmList<Gasto> getGastos() {
         return gastos;
     }
 
-    public void setGastos(List<Gasto> gastos) {
+    public void setGastos(RealmList<Gasto> gastos) {
         this.gastos = gastos;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

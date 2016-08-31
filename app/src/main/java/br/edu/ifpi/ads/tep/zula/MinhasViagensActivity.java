@@ -26,12 +26,14 @@ import br.edu.ifpi.ads.tep.zula.dominio.dao.DAO;
 import br.edu.ifpi.ads.tep.zula.dominio.modelo.Gasto;
 import br.edu.ifpi.ads.tep.zula.dominio.modelo.Viagem;
 import br.edu.ifpi.ads.tep.zula.util.UtilsData;
+import io.realm.Realm;
 
 public class MinhasViagensActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private List<Viagem> viagens;
     private ViagemAdapter adapter;
+    private DAO dao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +44,8 @@ public class MinhasViagensActivity extends AppCompatActivity {
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setTitle("Minhas Viagens");
         actionBar.dispatchMenuVisibilityChanged(true);
-
-        viagens =  DAO.getViagens();
+        dao = DAO.getInstance(Realm.getDefaultInstance());
+        viagens = dao.getViagemAll();
         adapter = new ViagemAdapter(this,viagens);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -72,7 +74,7 @@ public class MinhasViagensActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                List<Viagem> viagensSelecionadas = new ArrayList<>();
+              /*  List<Viagem> viagensSelecionadas = new ArrayList<>();
                 if(recyclerView.getAdapter() != null) {
                     for (int i = 0; i < recyclerView.getChildCount(); i++) {
                         Viagem viagem = viagens.get(i);
@@ -89,7 +91,7 @@ public class MinhasViagensActivity extends AppCompatActivity {
                 else if(viagensSelecionadas.isEmpty() && newText.trim() == ""){
                     adapter.setViagens(DAO.getViagens());
                     recyclerView.setAdapter(adapter);
-                }
+                }*/
                 return false;
             }
         };
@@ -170,7 +172,7 @@ public class MinhasViagensActivity extends AppCompatActivity {
     }
 
     private void excluirViagem() {
-        List<Viagem> viagemsSelecionadas = new ArrayList<>();
+       /* List<Viagem> viagemsSelecionadas = new ArrayList<>();
         if(recyclerView.getAdapter() != null) {
             for (int i = 0; i < recyclerView.getChildCount(); i++) {
                 CheckBox checkBox = (CheckBox) recyclerView.getChildAt(i).findViewById(R.id.checkViagem);
@@ -184,7 +186,7 @@ public class MinhasViagensActivity extends AppCompatActivity {
         }
         else{
             Toast.makeText(this, "Selecione pelo menos um item.", Toast.LENGTH_SHORT).show();
-        }
+        }*/
 
     }
 
@@ -196,24 +198,24 @@ public class MinhasViagensActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        dao = DAO.getInstance(Realm.getDefaultInstance());
         if(requestCode == 0){
             if(data!= null) {
                 Bundle extras = data.getExtras();
                 if (extras != null) {
                     Viagem viagem = (Viagem) extras.getSerializable("VIAGEM");
-                    List<Viagem> viagens = DAO.getViagens();
+                    List<Viagem> viagens = dao.getViagemAll();
                     if (viagens.contains(viagem)) {
                         adapter.atualizar(viagem);
                         recyclerView.setAdapter(adapter);
                     } else {
-                        viagem.setId(viagens.size());
                         viagens.add(viagem);
                     }
                 }
             }
         }
         /*Atualizar listas*/
-        adapter.setViagens(DAO.getViagens());
+        adapter.setViagens(dao.getViagemAll());
         recyclerView.setAdapter(adapter);
         super.onActivityResult(requestCode, resultCode, data);
     }

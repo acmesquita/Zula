@@ -22,11 +22,13 @@ import java.util.List;
 
 import br.edu.ifpi.ads.tep.zula.dominio.dao.DAO;
 import br.edu.ifpi.ads.tep.zula.dominio.modelo.Viagem;
+import io.realm.Realm;
 
 public class MainActivity extends AppCompatActivity {
 
     private final int NOVA_VIAGEM = 0;
-
+    DAO dao;
+    private Realm realm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitle("Zula");
         toolbar.setNavigationIcon(R.drawable.ico_turismo);
         setSupportActionBar(toolbar);
-
 
     }
     public void onOpcaoNovaViagem(View view) {
@@ -58,8 +59,6 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == NOVA_VIAGEM){
             switch (resultCode) {
                 case RESULT_OK:
-                    Viagem viagem = (Viagem) bundle.getSerializable("VIAGEM");
-                    DAO.addViagem(viagem);
                     break;
                 case RESULT_CANCELED:
                     Toast.makeText(this, "A viagem não foi salva.", Toast.LENGTH_SHORT).show();
@@ -71,14 +70,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void onOpcaoListarViagem(View view) {
         /*Intent para tela de Listagem das Viagens*/
-        Toast.makeText(this, "Clicou em Listar Viagem", Toast.LENGTH_SHORT).show();
+        /*Toast.makeText(this, "Clicou em Listar Viagem", Toast.LENGTH_SHORT).show();*/
         Intent intent = new Intent(this, MinhasViagensActivity.class);
         startActivity(intent);
     }
 
     public void onOpcaoNovoGasto(View view) {
         /*Intent para tela de Casdastro*/
-        Toast.makeText(this, "Clicou em Novo Gasto", Toast.LENGTH_SHORT).show();
+        /*Toast.makeText(this, "Clicou em Novo Gasto", Toast.LENGTH_SHORT).show();*/
         Intent intent = new Intent(this, NovoGastoActivity.class);
         startActivity(intent);
     }
