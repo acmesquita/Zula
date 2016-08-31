@@ -34,6 +34,7 @@ public class NovaViagemActivity extends AppCompatActivity implements View.OnClic
     private Button button;
     private Viagem viagem;
     private DAO dao;
+    private Realm realm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +73,8 @@ public class NovaViagemActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
+        realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
         try {
             if (edtDestino.getText().toString().trim() != "") {
                 viagem.setDestino(edtDestino.getText().toString());
@@ -92,6 +95,7 @@ public class NovaViagemActivity extends AppCompatActivity implements View.OnClic
             setResult(RESULT_CANCELED);
             finish();
         }
+        realm.commitTransaction();
         dao = DAO.getInstance(Realm.getDefaultInstance());
         dao.saveVigem(viagem);
         finish();
